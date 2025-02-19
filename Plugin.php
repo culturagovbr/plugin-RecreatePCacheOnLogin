@@ -12,9 +12,12 @@ class Plugin extends \MapasCulturais\Plugin {
         $app->hook('auth.login', function($user) use($app){
             /** @var User $user */
             // $agents = $app->repo('Agent')->findBy(['user' => $user, '_type' => 1]);
-            $agents = $app->repo('Agent')->findBy(['user' => $user]);
-            foreach($agents as $agent) {
-                $app->enqueueEntityToPCacheRecreation($agent);
+            $preventOverhead = (bool) $user->metadata['preventOverhead'] ?? false;
+            if (!$preventOverhead) {
+                $agents = $app->repo('Agent')->findBy(['user' => $user]);
+                foreach($agents as $agent) {
+                    $app->enqueueEntityToPCacheRecreation($agent);
+                }
             }
         });
     }
