@@ -12,7 +12,7 @@ class Plugin extends \MapasCulturais\Plugin {
         $app->hook('auth.login', function($user) use($app){
             /** @var User $user */
             // $agents = $app->repo('Agent')->findBy(['user' => $user, '_type' => 1]);
-            $preventOverhead = (bool) $user->metadata['preventOverhead'] ?? false;
+            $preventOverhead = (bool) ($user->metadata['preventOverhead'] ?? false);
             if (!$preventOverhead) {
                 $agents = $app->repo('Agent')->findBy(['user' => $user]);
                 foreach($agents as $agent) {
